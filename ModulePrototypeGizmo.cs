@@ -31,11 +31,17 @@ namespace Sailing.WaveFunctionCollapse
                 for (int i = 0; i < 6; i++)
                 {
                     var hint = ModulePrototype.editorData.GetConnectorHint(i);
-                    if (hint.Mesh != null)
+                    if (hint.meshes != null && hint.meshes.Count != 0)
                     {
-                        Gizmos.DrawMesh(hint.Mesh,
-                            position + rotation * Orientations.Direction[i].ToVector3() * AbstractMap.BLOCK_SIZE,
-                            rotation * Quaternion.Euler(Vector3.up * 90f * hint.Rotation));
+                        List<Mesh> meshes = hint.meshes;
+                        List<int> rotations = hint.Rotations;
+
+                        for (int j = 0; j < meshes.Count; j++){
+                            Gizmos.DrawMesh(
+                                hint.meshes[j],
+                                position + rotation * Orientations.Direction[i].ToVector3() * AbstractMap.BLOCK_SIZE,
+                                rotation * Quaternion.Euler(Vector3.up * 90f * hint.Rotations[j]));
+                        }
                     }
                 }
             }

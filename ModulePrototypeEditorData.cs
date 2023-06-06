@@ -15,13 +15,13 @@ namespace Sailing.WaveFunctionCollapse
 
         public struct ConnectorHint
         {
-            public readonly Mesh Mesh;
-            public readonly int Rotation;
+            public readonly List<Mesh> meshes;
+            public readonly List<int> Rotations;
 
-            public ConnectorHint(int rotation, Mesh mesh)
+            public ConnectorHint(List<int> rotations, List<Mesh> meshes)
             {
-                this.Rotation = rotation;
-                this.Mesh = mesh;
+                this.Rotations = rotations;
+                this.meshes = meshes;
             }
         }
 
@@ -46,6 +46,9 @@ namespace Sailing.WaveFunctionCollapse
         public ConnectorHint GetConnectorHint(int direction)
         {
             var face = this.ModulePrototype.Faces[direction];
+            List<Mesh> meshes = new List<Mesh>();
+            List<int> rotations = new List<int>();
+
             if (face is ModulePrototype.HorizontalFaceDetails)
             {
                 var horizontalFace = face as ModulePrototype.HorizontalFaceDetails;
@@ -65,10 +68,15 @@ namespace Sailing.WaveFunctionCollapse
                         }
                         if (otherFace.Connector == face.Connector && ((horizontalFace.Symmetric && otherFace.Symmetric) || otherFace.Flipped != horizontalFace.Flipped))
                         {
-                            return new ConnectorHint(rotation, this.getMesh(prototype));
+                            rotations.Add(rotation);
+                            meshes.Add(this.getMesh(prototype));
                         }
                     }
                 }
+            }
+
+            if(rotations.Count != 0 && meshes.Count != 0){
+                return new ConnectorHint(rotations, meshes);
             }
 
             if (face is ModulePrototype.VerticalFaceDetails)
@@ -87,8 +95,13 @@ namespace Sailing.WaveFunctionCollapse
                         continue;
                     }
 
-                    return new ConnectorHint(verticalFace.Rotation - otherFace.Rotation, this.getMesh(prototype));
+                    rotations.Add(verticalFace.Rotation - otherFace.Rotation);
+                    meshes.Add(this.getMesh(prototype));
                 }
+            }
+
+            if(rotations.Count != 0 && meshes.Count != 0){
+                return new ConnectorHint(rotations, meshes);
             }
 
             return new ConnectorHint();

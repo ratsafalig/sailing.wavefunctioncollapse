@@ -1,1 +1,3 @@
 sailing.wavefunctioncollapse
+
+Assets/Sailing/
