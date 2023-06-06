@@ -16,7 +16,7 @@ namespace Sailing.WaveFunctionCollapse
         /// <param name="respectNeigborExclusions"></param>
 		public void CreateModules(bool respectNeigborExclusions = true)
         {
-            doCreateModules();
+            doCreateModules(respectNeigborExclusions);
         }
 
 

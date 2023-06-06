@@ -27,7 +27,7 @@ namespace Sailing.WaveFunctionCollapse
         /// </summary>
         public readonly short[][] InitialModuleHealth;
 
-        public CollapseStrategy strategy;
+        public CollapseStrategy strategy = new CollapseStrategy();
 
         public AbstractMap()
         {
