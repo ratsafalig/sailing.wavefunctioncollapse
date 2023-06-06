@@ -27,6 +27,8 @@ namespace Sailing.WaveFunctionCollapse
         /// </summary>
         public readonly short[][] InitialModuleHealth;
 
+        public CollapseStrategy strategy;
+
         public AbstractMap()
         {
             InfiniteMap.Random = new System.Random();
@@ -102,20 +104,8 @@ namespace Sailing.WaveFunctionCollapse
 
             while (this.workArea.Any())
             {
-                float minEntropy = float.PositiveInfinity;
-                Slot selected = null;
-
-                foreach (var slot in workArea)
-                {
-                    float entropy = slot.Modules.Entropy;
-                    if (entropy < minEntropy)
-                    {
-                        selected = slot;
-                        minEntropy = entropy;
-                    }
-                }
-                try
-                {
+                try{
+                    var selected = this.strategy.Select(workArea);
                     selected.CollapseRandom();
                 }
                 catch (CollapseFailedException)
