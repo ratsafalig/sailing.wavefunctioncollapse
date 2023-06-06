@@ -97,6 +97,7 @@ namespace Sailing.WaveFunctionCollapse
 		try {
 #endif
             this.RemovalQueue.Clear();
+            
             this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
             while (this.workArea.Any())

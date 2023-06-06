@@ -21,13 +21,8 @@ namespace Sailing.WaveFunctionCollapse
 
             EditorGUILayout.HelpBox("Create a transform that contains one child for each module prototype and save it as a prefab. Drag it into the Prototypes property above and click \"Create module data\".", MessageType.Info);
 
-            if (GUILayout.Button("Create module data by connector"))
-            {
-                moduleData.CreateModulesByConnector();
-            }
-
-            if(GUILayout.Button("Create module data by hierarchy")){
-                moduleData.CreateModulesByHierarchy();
+            if(GUILayout.Button("Create module data")){
+                moduleData.CreateModules();
             }
 
             EditorGUILayout.HelpBox("This removes neighbors that are implicitly exluded. It's optional and will make map generation ~20% faster.", MessageType.Info);
