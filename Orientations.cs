@@ -58,10 +58,16 @@ namespace Sailing.WaveFunctionCollapse
             Orientations.directions = Orientations.vectors.Select(vector => Vector3Int.RoundToInt(vector)).ToArray();
         }
 
+        /// <summary>
+        /// LEFT, BACk, RIGHT, FORWARD, clockwise
+        /// </summary>
         public static readonly int[] HorizontalDirections = { 0, 2, 3, 5 };
 
         public static readonly string[] Names = { "-Red (Left)", "-Green (Down)", "-Blue (Back)", "+Red (Right)", "+Green (Up)", "+Blue (Forward)" };
 
+        /// <summary>
+        /// rotate amount * 90° from direction, clockwise
+        /// </summary>
         public static int Rotate(int direction, int amount)
         {
             if (direction == 1 || direction == 4)

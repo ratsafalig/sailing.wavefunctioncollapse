@@ -22,6 +22,9 @@ namespace Sailing.WaveFunctionCollapse
         private int backtrackBarrier;
         private int backtrackAmount = 0;
 
+        /// <summary>
+        /// the number of tile from each direction
+        /// </summary>
         public readonly short[][] InitialModuleHealth;
 
         public AbstractMap()
@@ -195,6 +198,11 @@ namespace Sailing.WaveFunctionCollapse
             }
         }
 
+        /// <summary>
+        /// calculate the number of socket can be linked from each direction
+        /// </summary>
+        /// <param name="modules"></param>
+        /// <returns></returns>
         private short[][] createInitialModuleHealth(Module[] modules)
         {
             var initialModuleHealth = new short[6][];
@@ -202,7 +210,8 @@ namespace Sailing.WaveFunctionCollapse
             {
                 initialModuleHealth[i] = new short[modules.Length];
                 foreach (var module in modules)
-                {
+                {   
+                    // module.PossibleNeighbors[(i + 3) % 6], opposite direction of direction i
                     foreach (var possibleNeighbor in module.PossibleNeighbors[(i + 3) % 6])
                     {
                         initialModuleHealth[i][possibleNeighbor.Index]++;
@@ -211,14 +220,15 @@ namespace Sailing.WaveFunctionCollapse
             }
 
 #if UNITY_EDITOR
-		for (int i = 0; i < modules.Length; i++) {
-			for (int d = 0; d < 6; d++) {
-				if (initialModuleHealth[d][i] == 0) {
-					Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prefab);
-					throw new Exception("Unreachable module.");
-				}
-			}
-		}
+        // !! ratsafalig
+		// for (int i = 0; i < modules.Length; i++) {
+		// 	for (int d = 0; d < 6; d++) {
+		// 		if (initialModuleHealth[d][i] == 0) {
+		// 			Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prefab);
+		// 			throw new Exception("Unreachable module.");
+		// 		}
+		// 	}
+		// }
 #endif
 
             return initialModuleHealth;

@@ -7,7 +7,7 @@ using System;
 
 namespace Sailing.WaveFunctionCollapse
 {
-    [CreateAssetMenu(menuName = "Wave Function Collapse/Module Data", fileName = "modules.asset")]
+    [CreateAssetMenu(menuName = "Wave Function Collapse/Sailing Module Data", fileName = "modules.asset")]
     public class ModuleData : ScriptableObject, ISerializationCallbackReceiver
     {
         public static Module[] Current;
@@ -67,32 +67,48 @@ namespace Sailing.WaveFunctionCollapse
             }
         }
 
-		private ModulePrototype[][] getPrototypeNeighbors(ModulePrototype root){
-			ModulePrototype[][] result = new ModulePrototype[6][];
+		private string[][] getPrototypeNeighbors(ModulePrototype root){
+			string[][] result = new string[6][];
 			foreach(Transform transform in root.transform){
 				var name = transform.name;
 				if(name.Contains("FORWARD")){
-					result[Orientations.FORWARD] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.FORWARD] = getPrototypeNeighbor(transform);
 				}
 				if(name.Contains("BACK")){
-					result[Orientations.BACK] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.BACK] = getPrototypeNeighbor(transform);
 				}
 				if(name.Contains("LEFT")){
-					result[Orientations.LEFT] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.LEFT] = getPrototypeNeighbor(transform);
 				}
 				if(name.Contains("RIGHT")){
-					result[Orientations.RIGHT] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.RIGHT] = getPrototypeNeighbor(transform);
 				}
 				if(name.Contains("UP")){
-					result[Orientations.UP] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.UP] = getPrototypeNeighbor(transform);
 				}
 				if(name.Contains("DOWN")){
-					result[Orientations.DOWN] = transform.GetComponents<ModulePrototype>();
+					result[Orientations.DOWN] = getPrototypeNeighbor(transform);
 				}
 			}
 			return result;
 		}
 
+        private string[] getPrototypeNeighbor(Transform transform){
+            string[] result = new string[transform.childCount];
+
+            for (int i = 0; i < transform.childCount; i++){
+                var child = transform.GetChild(i);
+
+                result[i] = child.name;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// using ModulePrototype's connector number to decide any two tiles can concat
+        /// </summary>
+        /// <param name="respectNeigborExclusions"></param>
         public void CreateModulesByConnector(bool respectNeigborExclusions = true)
         {
             int count = 0;
@@ -154,6 +170,10 @@ namespace Sailing.WaveFunctionCollapse
             AssetDatabase.SaveAssets();
         }
 
+        /// <summary>
+        /// using transform hierarchy to decide any two tiles can concat 
+        /// </summary>
+        /// <param name="respectNeigborExclusions"></param>
 		public void CreateModulesByHierarchy(bool respectNeigborExclusions = true){
 			int count = 0;
             var modules = new List<Module>();
@@ -193,17 +213,31 @@ namespace Sailing.WaveFunctionCollapse
             foreach (var module in modules)
             {
                 module.PossibleNeighbors = new ModuleSet[6];
+
+                var prototypeNeighbors = this.getPrototypeNeighbors(module.Prototype);
+
                 for (int direction = 0; direction < 6; direction++)
                 {
                     var face = scenePrototype[module].Faces[Orientations.Rotate(direction, module.Rotation)];
-                    module.PossibleNeighbors[direction] = new ModuleSet(modules
-                        .Where(neighbor => module.Fits(direction, neighbor)
-                            && (!respectNeigborExclusions || (
-                                !face.ExcludedNeighbours.Contains(scenePrototype[neighbor])
-                                && !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(scenePrototype[module]))
-                                && (!face.EnforceWalkableNeighbor || scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
-                                && (face.Walkable || !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
-                        ));
+
+                    var neighbors = prototypeNeighbors[direction];
+
+                    module.PossibleNeighbors[direction] = new ModuleSet(
+                        modules.Where(
+                            neighbor => neighbors.Any(
+                                elem => elem == neighbor.Prototype.name
+                            ) 
+                        )
+                    );
+
+                    // module.PossibleNeighbors[direction] = new ModuleSet(modules
+                    //     .Where(neighbor => module.Fits(direction, neighbor)
+                    //         && (!respectNeigborExclusions || (
+                    //             !face.ExcludedNeighbours.Contains(scenePrototype[neighbor])
+                    //             && !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(scenePrototype[module]))
+                    //             && (!face.EnforceWalkableNeighbor || scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
+                    //             && (face.Walkable || !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
+                    //     ));
                 }
 
                 module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
