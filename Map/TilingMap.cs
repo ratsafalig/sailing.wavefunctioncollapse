@@ -58,55 +58,5 @@ namespace Sailing.WaveFunctionCollapse
                 }
             }
         }
-
-        public override void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints)
-        {
-            foreach (var constraint in constraints)
-            {
-                int y = constraint.RelativeY;
-                if (y < 0)
-                {
-                    y += this.Size.y;
-                }
-                switch (constraint.Direction)
-                {
-                    case BoundaryConstraint.ConstraintDirection.Up:
-                        for (int x = 0; x < this.Size.x; x++)
-                        {
-                            for (int z = 0; z < this.Size.z; z++)
-                            {
-                                if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector)
-                                {
-                                    this.GetSlot(new Vector3Int(x, this.Size.y - 1, z)).EnforceConnector(4, constraint.Connector);
-                                }
-                                else
-                                {
-                                    this.GetSlot(new Vector3Int(x, this.Size.y - 1, z)).ExcludeConnector(4, constraint.Connector);
-                                }
-                            }
-                        }
-                        break;
-                    case BoundaryConstraint.ConstraintDirection.Down:
-                        for (int x = 0; x < this.Size.x; x++)
-                        {
-                            for (int z = 0; z < this.Size.z; z++)
-                            {
-                                if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector)
-                                {
-                                    this.GetSlot(new Vector3Int(x, 0, z)).EnforceConnector(1, constraint.Connector);
-                                }
-                                else
-                                {
-                                    this.GetSlot(new Vector3Int(x, 0, z)).ExcludeConnector(1, constraint.Connector);
-                                }
-                            }
-                        }
-                        break;
-                    case BoundaryConstraint.ConstraintDirection.Horizontal:
-                        // Horizontal constraints are ignored
-                        break;
-                }
-            }
-        }
     }
 }

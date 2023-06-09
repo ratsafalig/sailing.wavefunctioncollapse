@@ -56,41 +56,6 @@ namespace Sailing.WaveFunctionCollapse
             return (position - this.rangeLimitCenter).magnitude > this.RangeLimit;
         }
 
-        public override void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints)
-        {
-            foreach (var constraint in constraints)
-            {
-                int y = constraint.RelativeY;
-                if (y < 0)
-                {
-                    y += this.Height;
-                }
-                int[] directions = null;
-                switch (constraint.Direction)
-                {
-                    case BoundaryConstraint.ConstraintDirection.Up:
-                        directions = new int[] { 4 }; break;
-                    case BoundaryConstraint.ConstraintDirection.Down:
-                        directions = new int[] { 1 }; break;
-                    case BoundaryConstraint.ConstraintDirection.Horizontal:
-                        directions = Orientations.HorizontalDirections; break;
-                }
-
-                foreach (int d in directions)
-                {
-                    switch (constraint.Mode)
-                    {
-                        case BoundaryConstraint.ConstraintMode.EnforceConnector:
-                            this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).EnforceConnector(d, constraint.Connector);
-                            break;
-                        case BoundaryConstraint.ConstraintMode.ExcludeConnector:
-                            this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).ExcludeConnector(d, constraint.Connector);
-                            break;
-                    }
-                }
-            }
-        }
-
         public override IEnumerable<Slot> GetAllSlots()
         {
             return this.slots.Values;

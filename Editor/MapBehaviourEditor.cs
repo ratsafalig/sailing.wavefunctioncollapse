@@ -10,7 +10,7 @@ namespace Sailing.WaveFunctionCollapse
     [CustomEditor(typeof(MapBehaviour))]
     public class MapBehaviourEditor : Editor
     {
-        private int collapseAreaSize = 6;
+        private int collapseAreaSize = 2;
 
         public override void OnInspectorGUI()
         {

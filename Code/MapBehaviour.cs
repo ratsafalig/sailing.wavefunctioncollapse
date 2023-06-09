@@ -53,12 +53,6 @@ namespace Sailing.WaveFunctionCollapse
             ModuleData.Current = this.ModuleData.Modules;
             this.Clear();
             this.Map = new InfiniteMap(this.MapHeight);
-            if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any())
-            {
-                this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
-            }
-            //this.cullingData = this.GetComponent<CullingData>();
-            //this.cullingData.Initialize();
         }
 
         public bool Initialized

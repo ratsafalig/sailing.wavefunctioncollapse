@@ -17,43 +17,6 @@ namespace Sailing.WaveFunctionCollapse
         public Module[] Modules;
 
 #if UNITY_EDITOR
-        // irr
-        public void SimplifyNeighborData()
-        {
-            ModuleData.Current = this.Modules;
-            const int height = 12;
-            int count = 0;
-            var center = new Vector3Int(0, height / 2, 0);
-
-            int p = 0;
-            foreach (var module in this.Modules)
-            {
-                var map = new InfiniteMap(height);
-                var slot = map.GetSlot(center);
-                try
-                {
-                    slot.Collapse(module);
-                }
-                catch (CollapseFailedException exception)
-                {
-                    throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + (exception.Slot.Position - center) + ".");
-                }
-                for (int direction = 0; direction < 6; direction++)
-                {
-                    var neighbor = slot.GetNeighbor(direction);
-                    int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Count;
-                    module.PossibleNeighbors[direction].Intersect(neighbor.Modules);
-                    count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Count;
-                }
-                module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
-                p++;
-                EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / this.Modules.Length);
-            }
-            Debug.Log("Removed " + count + " impossible neighbors.");
-            EditorUtility.ClearProgressBar();
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
-        }
 
         private IEnumerable<ModulePrototype> getPrototypes()
         {
