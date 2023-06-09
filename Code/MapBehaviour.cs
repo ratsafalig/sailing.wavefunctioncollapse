@@ -65,21 +65,26 @@ namespace Sailing.WaveFunctionCollapse
 
         public bool BuildSlot(Slot slot)
         {
-            if (slot.GameObject != null)
+            if (slot.Instantiation != null)
             {
 #if UNITY_EDITOR
-			    GameObject.DestroyImmediate(slot.GameObject);
+			    GameObject.DestroyImmediate(slot.Instantiation);
 #else
                 GameObject.Destroy(slot.GameObject);
 #endif
             }
+
+            if(!slot.Collapsed){
+                return false;
+            }
+
             var gameObject = GameObject.Instantiate(slot.Module.Prefab);
             gameObject.name = slot.Module.Prefab.name + " " + slot.Position;
             GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
             gameObject.transform.parent = this.transform;
             gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
             gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * slot.Rotation);
-            slot.GameObject = gameObject;
+            slot.Instantiation = gameObject;
             
             return true;
         }

@@ -58,9 +58,7 @@ namespace Sailing.WaveFunctionCollapse
 
         public override IEnumerable<Slot> GetAllSlots()
         {
-            return this.slots.Values;
+            return this.order;
         }
-
-        private bool muteRangeLimitWarning = false;
     }
 }

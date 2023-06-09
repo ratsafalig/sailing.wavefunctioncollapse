@@ -9,7 +9,9 @@ namespace Sailing.WaveFunctionCollapse
 {
     public abstract partial class AbstractMap
     {
-        public void Collapse(Vector3Int start, Vector3Int size, bool showProgress = false)
+        public Queue<Slot> order;
+
+        public void CollapseMap(Vector3Int start, Vector3Int size, bool showProgress = false)
         {
             var targets = new List<Vector3Int>();
             for (int x = 0; x < size.x; x++)
@@ -22,60 +24,31 @@ namespace Sailing.WaveFunctionCollapse
                     }
                 }
             }
-            this.Collapse(targets, showProgress);
+            this.CollapseMap(targets, showProgress);
         }
 
-        public void Collapse(IEnumerable<Vector3Int> targets, bool showProgress = false)
+        private void CollapseMap(IEnumerable<Vector3Int> targets, bool showProgress = false)
         {
-#if UNITY_EDITOR
-            try
+            this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
+
+            for (int i = 0; i < this.workArea.Count; i++)
             {
-#endif
-                this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
-
-                for(int i = 0; i < this.workArea.Count; i++)
+                try
                 {
-                    try
-                    {
-                        var selected = this.Select(workArea);
+                    var selected = this.Select(workArea);
 
-                        if(selected != null){
-                            selected.Collapse();
-                        }
-                    }
-                    catch (CollapseFailedException)
+                    if (selected != null)
                     {
-
+                        selected.Collapse();
                     }
-
-#if UNITY_EDITOR
-                    if (showProgress && this.workArea.Count % 20 == 0)
-                    {
-                        if (EditorUtility.DisplayCancelableProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count()))
-                        {
-                            EditorUtility.ClearProgressBar();
-                            throw new Exception("Map generation cancelled.");
-                        }
-                    }
-#endif
+                    
+                    order.Enqueue(selected);
                 }
-
-#if UNITY_EDITOR
-                if (showProgress)
+                catch (CollapseFailedException)
                 {
-                    EditorUtility.ClearProgressBar();
+
                 }
             }
-            catch (Exception exception)
-            {
-                if (showProgress)
-                {
-                    EditorUtility.ClearProgressBar();
-                }
-                Debug.LogWarning("Exception in world generation thread at" + exception);
-                throw exception;
-            }
-#endif
         }
 
         public Slot Select(IEnumerable<Slot> slots)

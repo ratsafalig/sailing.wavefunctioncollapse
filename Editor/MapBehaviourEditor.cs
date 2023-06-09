@@ -30,7 +30,7 @@ namespace Sailing.WaveFunctionCollapse
             {
                 mapBehaviour.Initialize();
                 var startTime = System.DateTime.Now;
-                mapBehaviour.Map.Collapse(Vector3Int.zero, new Vector3Int(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
+                mapBehaviour.Map.CollapseMap(Vector3Int.zero, new Vector3Int(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
                 Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
                 mapBehaviour.BuildAllSlots();
                 GUIUtility.ExitGUI();

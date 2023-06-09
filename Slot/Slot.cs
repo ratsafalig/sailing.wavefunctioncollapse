@@ -12,7 +12,7 @@ namespace Sailing.WaveFunctionCollapse
     {
         public Vector3Int Position;
         public int Rotation;
-        public GameObject GameObject;
+        public GameObject Instantiation;
         public Module Module;
 
         // List of modules that can still be placed here
@@ -50,8 +50,8 @@ namespace Sailing.WaveFunctionCollapse
             strategy.Collapse(this);
         }
 
-        public void SetModules(ModuleSet modulesToSet){
-            this.Modules = modulesToSet;
+        public void UpdateModules(ModuleSet modulesToSet){
+            this.Modules.Intersect(modulesToSet);
         }
 
         public override int GetHashCode()

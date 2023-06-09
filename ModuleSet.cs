@@ -294,5 +294,16 @@ namespace Sailing.WaveFunctionCollapse
             }
             return -1f / total * entropySum + Mathf.Log(total);
         }
+
+        public override string ToString()
+        {
+            var result = "";
+            
+            foreach(var module in this){
+                result += module;
+            }
+
+            return result;
+        }
     }
 }

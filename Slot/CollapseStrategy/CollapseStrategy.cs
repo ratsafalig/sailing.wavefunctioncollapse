@@ -10,10 +10,10 @@ namespace Sailing.WaveFunctionCollapse{
     public class CollapseStrategy{
         public void Collapse(Slot slot)
         {
-            this.CollapseRandom(slot);
+            this.doCollapse_0(slot);
         }
 
-        private void CollapseRandom(Slot slot){
+        private void doCollapse_0(Slot slot){
             if (!slot.Modules.Any())
             {
                 throw new CollapseFailedException(slot);
@@ -31,14 +31,14 @@ namespace Sailing.WaveFunctionCollapse{
                 p += candidate.Prototype.Probability;
                 if (p >= roll)
                 {
-                    this.doCollapse(slot, candidate);
+                    this.doCollapse_1(slot, candidate);
                     return;
                 }
             }
-            this.doCollapse(slot, slot.Modules.First());
+            this.doCollapse_1(slot, slot.Modules.First());
         }
 
-        private void doCollapse(Slot slot, Module module){
+        private void doCollapse_1(Slot slot, Module module){
 
             for (int d = 0; d < 6; d++){
                 var neighbors = module.PossibleNeighbors[d];
@@ -47,7 +47,7 @@ namespace Sailing.WaveFunctionCollapse{
 
                 if(neighborSlot != null)
                 {
-                    neighborSlot.SetModules(neighbors);
+                    neighborSlot.UpdateModules(neighbors);
                 }
             }
 
