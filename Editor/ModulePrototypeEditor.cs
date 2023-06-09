@@ -33,25 +33,6 @@ namespace Sailing.WaveFunctionCollapse
                     i++;
                 }
             }
-
-            if (GUILayout.Button("Reset connectors"))
-            {
-                foreach (var face in modulePrototype.Faces)
-                {
-                    face.ResetConnector();
-                }
-            }
-
-            if (GUILayout.Button("Reset exlusion rules in all prototypes"))
-            {
-                foreach (var prototype in modulePrototype.transform.parent.GetComponentsInChildren<ModulePrototype>())
-                {
-                    foreach (var face in prototype.Faces)
-                    {
-                        face.ExcludedNeighbours = new ModulePrototype[0];
-                    }
-                }
-            }
         }
     }
 }

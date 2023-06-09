@@ -9,11 +9,14 @@ namespace Sailing.WaveFunctionCollapse
 {
     public abstract partial class AbstractMap
     {
-        public Queue<Slot> order;
+        public Queue<Slot> Order;
 
-        public void CollapseMap(Vector3Int start, Vector3Int size, bool showProgress = false)
+        public void Collapse(Vector3Int start, Vector3Int size, bool showProgress = false)
         {
+            this.Order = new Queue<Slot>();
+
             var targets = new List<Vector3Int>();
+            
             for (int x = 0; x < size.x; x++)
             {
                 for (int y = 0; y < size.y; y++)
@@ -24,10 +27,10 @@ namespace Sailing.WaveFunctionCollapse
                     }
                 }
             }
-            this.CollapseMap(targets, showProgress);
+            this.Collapse(targets, showProgress);
         }
 
-        private void CollapseMap(IEnumerable<Vector3Int> targets, bool showProgress = false)
+        private void Collapse(IEnumerable<Vector3Int> targets, bool showProgress = false)
         {
             this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
@@ -42,7 +45,7 @@ namespace Sailing.WaveFunctionCollapse
                         selected.Collapse();
                     }
                     
-                    order.Enqueue(selected);
+                    Order.Enqueue(selected);
                 }
                 catch (CollapseFailedException)
                 {

@@ -10,7 +10,7 @@ namespace Sailing.WaveFunctionCollapse
     [CustomEditor(typeof(MapBehaviour))]
     public class MapBehaviourEditor : Editor
     {
-        private int collapseAreaSize = 2;
+        private int collapseAreaSize = 6;
 
         public override void OnInspectorGUI()
         {
@@ -30,7 +30,7 @@ namespace Sailing.WaveFunctionCollapse
             {
                 mapBehaviour.Initialize();
                 var startTime = System.DateTime.Now;
-                mapBehaviour.Map.CollapseMap(Vector3Int.zero, new Vector3Int(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
+                mapBehaviour.Map.Collapse(Vector3Int.zero, new Vector3Int(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
                 Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
                 mapBehaviour.BuildAllSlots();
                 GUIUtility.ExitGUI();

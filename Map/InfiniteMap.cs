@@ -16,18 +16,10 @@ namespace Sailing.WaveFunctionCollapse
         public Vector3Int rangeLimitCenter;
         public int RangeLimit = 80;
 
-        private TilingMap defaultColumn;
-
         public InfiniteMap(int height) : base()
         {
             this.Height = height;
             this.slots = new Dictionary<Vector3Int, Slot>();
-            this.defaultColumn = new TilingMap(new Vector3Int(1, height, 1));
-
-            if (ModuleData.Current == null || ModuleData.Current.Length == 0)
-            {
-                throw new InvalidOperationException("Module data was not available, please create module data first.");
-            }
         }
 
         public override Slot GetSlot(Vector3Int position)
@@ -47,7 +39,8 @@ namespace Sailing.WaveFunctionCollapse
                 return null;
             }
 
-            this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
+            this.slots[position] = new Slot(position, this);
+
             return this.slots[position];
         }
 
@@ -58,7 +51,7 @@ namespace Sailing.WaveFunctionCollapse
 
         public override IEnumerable<Slot> GetAllSlots()
         {
-            return this.order;
+            return this.Order;
         }
     }
 }

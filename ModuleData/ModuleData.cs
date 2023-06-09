@@ -32,6 +32,7 @@ namespace Sailing.WaveFunctionCollapse
 
 		private string[][] getPrototypeNeighbors(ModulePrototype root){
 			string[][] result = new string[6][];
+
 			foreach(Transform transform in root.transform){
 				var name = transform.name;
 				if(name.Contains("FORWARD")){
@@ -77,18 +78,6 @@ namespace Sailing.WaveFunctionCollapse
         public void OnAfterDeserialize()
         {
             ModuleData.Current = this.Modules;
-        }
-
-        public void SavePrototypes()
-        {
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(this.Prototypes);
-            AssetDatabase.SaveAssets();
-            foreach (var module in this.Modules)
-            {
-                module.Prototype = module.Prefab.GetComponent<ModulePrototype>();
-            }
-#endif
         }
     }
 }

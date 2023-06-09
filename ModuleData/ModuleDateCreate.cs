@@ -27,32 +27,15 @@ namespace Sailing.WaveFunctionCollapse
 
             var prototypes = this.getPrototypes().ToArray();
 
-            var scenePrototype = new Dictionary<Module, ModulePrototype>();
-
             for (int i = 0; i < prototypes.Length; i++)
             {
                 var prototype = prototypes[i];
 
-                for (int face = 0; face < 6; face++)
-                {
-                    if (prototype.Faces[face].ExcludedNeighbours == null)
-                    {
-                        prototype.Faces[face].ExcludedNeighbours = new ModulePrototype[0];
-                    }
-                }
+                var rotation = 0;
 
-                for (int rotation = 0; rotation < 4; rotation++)
-                {
-                    if (rotation == 0 || !prototype.CompareRotatedVariants(0, rotation))
-                    {
-                        var module = new Module(prototype.gameObject, rotation, count);
-                        modules.Add(module);
-                        scenePrototype[module] = prototype;
-                        count++;
-                    }
-                }
+                var module = new Module(prototype.gameObject, rotation, count++);
 
-                EditorUtility.DisplayProgressBar("Creating module prototypes...", prototype.gameObject.name, (float)i / prototypes.Length);
+                modules.Add(module);
             }
 
             ModuleData.Current = modules.ToArray();
@@ -65,32 +48,43 @@ namespace Sailing.WaveFunctionCollapse
 
                 for (int direction = 0; direction < 6; direction++)
                 {
-                    var face = scenePrototype[module].Faces[Orientations.Rotate(direction, module.Rotation)];
-
                     var neighbors = prototypeNeighbors[direction];
 
-                    module.PossibleNeighbors[direction] = new ModuleSet(
-                        modules.Where(
-                            neighbor => neighbors.Any(
-                                elem => elem == neighbor.Prototype.name
-                            )
+                    var possibleNeighborModules = modules.Where(
+                        neighbor => neighbors.Any(
+                            elem => elem == neighbor.Prototype.name
                         )
                     );
+
+                    module.PossibleNeighbors[direction] = new ModuleSet(possibleNeighborModules);
                 }
             }
-            EditorUtility.ClearProgressBar();
+
+            foreach(var module in modules){
+                var prototypeNeighbors = this.getPrototypeNeighbors(module.Prototype);
+
+                for (int direction = 0; direction < 6; direction++)
+                {
+                    var neighbors = prototypeNeighbors[direction];
+                    int oppositeDirection = (direction + 3) % 6;
+
+                    var possibleNeighborModules = modules.Where(
+                        neighbor => neighbors.Any(
+                            elem => elem == neighbor.Prototype.name
+                        )
+                    );
+
+                    foreach(var possibleNeighborModule in possibleNeighborModules){
+                        var prev = possibleNeighborModule.PossibleNeighbors[oppositeDirection];
+
+                        prev.Add(module);
+
+                        possibleNeighborModule.PossibleNeighbors[oppositeDirection] = prev;
+                    }
+                }
+            }
 
             this.Modules = modules.ToArray();
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="respectNeigborExclusions"></param>
-        public void CreateModulesConfig(bool respectNeigborExclusions = true){
-
         }
     }
 }

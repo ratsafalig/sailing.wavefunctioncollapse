@@ -22,7 +22,6 @@ namespace Sailing.WaveFunctionCollapse
         {
             InfiniteMap.Random = new System.Random();
             this.History = new RingBuffer<HistoryItem>(AbstractMap.HISTORY_SIZE);
-            this.order = new Queue<Slot>();
         }
 
         public abstract Slot GetSlot(Vector3Int position);
