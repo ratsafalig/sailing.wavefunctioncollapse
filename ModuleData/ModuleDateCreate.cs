@@ -77,8 +77,6 @@ namespace Sailing.WaveFunctionCollapse
                         )
                     );
                 }
-
-                module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
             }
             EditorUtility.ClearProgressBar();
 

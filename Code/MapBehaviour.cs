@@ -63,69 +63,31 @@ namespace Sailing.WaveFunctionCollapse
             }
         }
 
-        public void Update()
-        {
-            if (this.Map == null || this.Map.BuildQueue == null)
-            {
-                return;
-            }
-
-            int itemsLeft = 50;
-
-            while (this.Map.BuildQueue.Count != 0 && itemsLeft > 0)
-            {
-                var slot = this.Map.BuildQueue.Peek();
-                if (slot == null)
-                {
-                    return;
-                }
-                if (this.BuildSlot(slot))
-                {
-                    itemsLeft--;
-                }
-                this.Map.BuildQueue.Dequeue();
-            }
-            // this.cullingData.ClearOutdatedSlots();
-        }
-
         public bool BuildSlot(Slot slot)
         {
             if (slot.GameObject != null)
             {
-                // this.cullingData.RemoveSlot(slot);
 #if UNITY_EDITOR
-			GameObject.DestroyImmediate(slot.GameObject);
+			    GameObject.DestroyImmediate(slot.GameObject);
 #else
                 GameObject.Destroy(slot.GameObject);
 #endif
             }
-
-            if (!slot.Collapsed || slot.Module.Prototype.Spawn == false)
-            {
-                return false;
-            }
-            var module = slot.Module;
-            if (module == null)
-            { // Can be null due to race conditions
-                return false;
-            }
-
-            var gameObject = GameObject.Instantiate(module.Prototype.gameObject);
-            gameObject.name = module.Prototype.gameObject.name + " " + slot.Position;
+            var gameObject = GameObject.Instantiate(slot.Module.Prefab);
+            gameObject.name = slot.Module.Prefab.name + " " + slot.Position;
             GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
             gameObject.transform.parent = this.transform;
             gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
-            gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * module.Rotation);
+            gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * slot.Rotation);
             slot.GameObject = gameObject;
-            // this.cullingData.AddSlot(slot);
+            
             return true;
         }
 
         public void BuildAllSlots()
         {
-            while (this.Map.BuildQueue.Count != 0)
-            {
-                this.BuildSlot(this.Map.BuildQueue.Dequeue());
+            foreach(var slot in this.Map.GetAllSlots()){
+                this.BuildSlot(slot);
             }
         }
 

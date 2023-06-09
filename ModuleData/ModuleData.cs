@@ -77,10 +77,6 @@ namespace Sailing.WaveFunctionCollapse
         public void OnAfterDeserialize()
         {
             ModuleData.Current = this.Modules;
-            foreach (var module in this.Modules)
-            {
-                module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
-            }
         }
 
         public void SavePrototypes()

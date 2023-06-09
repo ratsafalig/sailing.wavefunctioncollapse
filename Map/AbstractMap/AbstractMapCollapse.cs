@@ -31,34 +31,21 @@ namespace Sailing.WaveFunctionCollapse
             try
             {
 #endif
-                this.RemovalQueue.Clear();
-
                 this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
-                while (this.workArea.Any())
+                for(int i = 0; i < this.workArea.Count; i++)
                 {
                     try
                     {
                         var selected = this.Select(workArea);
-                        selected.Collapse();
+
+                        if(selected != null){
+                            selected.Collapse();
+                        }
                     }
                     catch (CollapseFailedException)
                     {
-                        this.RemovalQueue.Clear();
-                        if (this.History.TotalCount > this.backtrackBarrier)
-                        {
-                            this.backtrackBarrier = this.History.TotalCount;
-                            this.backtrackAmount = 2;
-                        }
-                        else
-                        {
-                            this.backtrackAmount *= 2;
-                        }
-                        if (this.backtrackAmount > 0)
-                        {
-                            Debug.Log(this.History.Count + " Backtracking " + this.backtrackAmount + " steps...");
-                        }
-                        this.Undo(this.backtrackAmount);
+
                     }
 
 #if UNITY_EDITOR
@@ -85,7 +72,7 @@ namespace Sailing.WaveFunctionCollapse
                 {
                     EditorUtility.ClearProgressBar();
                 }
-                Debug.LogWarning("Exception in world generation thread at" + exception.StackTrace);
+                Debug.LogWarning("Exception in world generation thread at" + exception);
                 throw exception;
             }
 #endif
@@ -94,21 +81,25 @@ namespace Sailing.WaveFunctionCollapse
         public Slot Select(IEnumerable<Slot> slots)
         {
             Slot selected = null;
+
             float minEntropy = float.PositiveInfinity;
+
             foreach (var slot in slots)
             {
+                if (slot.Collapsed)
+                {   
+                    continue;
+                }
+
                 float entropy = slot.Modules.Entropy;
+                
                 if (entropy < minEntropy)
                 {
                     selected = slot;
                     minEntropy = entropy;
                 }
             }
-#if SAILING_DEBUG
-            if(selected != null){
-                Debug.Log("Select Slot " + selected.Position);
-            }
-#endif
+
             return selected;
         }
     }

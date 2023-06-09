@@ -61,29 +61,6 @@ namespace Sailing.WaveFunctionCollapse
             return this.slots.Values;
         }
 
-        public Slot GetDefaultSlot(int y)
-        {
-            return this.defaultColumn.GetSlot(Vector3Int.up * y);
-        }
-
-        public bool IsSlotInitialized(Vector3Int position)
-        {
-            return this.slots.ContainsKey(position);
-        }
-
         private bool muteRangeLimitWarning = false;
-
-        public void OnHitRangeLimit(Vector3Int position, ModuleSet modulesToRemove)
-        {
-            if (this.muteRangeLimitWarning || position.y < 0 || position.y >= this.Height)
-            {
-                return;
-            }
-
-            var moduleNames = modulesToRemove.Select(module => module.Name);
-            Debug.LogWarning("Hit range limit at " + position + ". Module(s) to be removed:\n" + string.Join("\n", moduleNames.ToArray()) + "\n");
-            this.muteRangeLimitWarning = true;
-        }
     }
-
 }

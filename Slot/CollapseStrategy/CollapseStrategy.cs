@@ -45,12 +45,14 @@ namespace Sailing.WaveFunctionCollapse{
 
                 var neighborSlot = slot.GetNeighborSlot(d);
 
-                // neighborSlot.
-
-                foreach(var neighbor in neighbors){
-                    
+                if(neighborSlot != null)
+                {
+                    neighborSlot.SetModules(neighbors);
                 }
             }
+
+            slot.Module = module;
+            slot.Collapsed = true;
         }
     }
 }
