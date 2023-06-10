@@ -10,8 +10,6 @@ namespace Sailing.WaveFunctionCollapse
     [CustomEditor(typeof(MapBehaviour))]
     public class MapBehaviourEditor : Editor
     {
-        private int collapseAreaSize = 6;
-
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -24,16 +22,16 @@ namespace Sailing.WaveFunctionCollapse
             }
 
             GUILayout.BeginHorizontal();
-            int.TryParse(GUILayout.TextField(this.collapseAreaSize.ToString()), out this.collapseAreaSize);
+            int.TryParse(GUILayout.TextField(mapBehaviour.collapseAreaSize.ToString()), out mapBehaviour.collapseAreaSize);
 
-            if (GUILayout.Button("Initialize " + this.collapseAreaSize + "x" + this.collapseAreaSize + " area"))
+            if (GUILayout.Button("Initialize " + mapBehaviour.collapseAreaSize + "x" + mapBehaviour.collapseAreaSize + " area"))
             {
-                mapBehaviour.Initialize();
                 var startTime = System.DateTime.Now;
-                mapBehaviour.Map.Collapse(Vector3Int.zero, new Vector3Int(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize));
-                Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
+                mapBehaviour.Initialize();
+                mapBehaviour.Map.Collapse();
                 mapBehaviour.BuildAllSlots();
                 GUIUtility.ExitGUI();
+                Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
             }
             GUILayout.EndHorizontal();
         }

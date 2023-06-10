@@ -10,28 +10,15 @@ namespace Sailing.WaveFunctionCollapse
     public class MapBehaviour : MonoBehaviour
     {
         public InfiniteMap Map;
-
-        public int MapHeight = 6;
-
-        public BoundaryConstraint[] BoundaryConstraints;
-
-        public bool ApplyBoundaryConstraints = true;
-
+        public int MapHeight = 1;
+        public int collapseAreaSize;
         public ModuleData ModuleData;
-
-        // private CullingData cullingData;
 
         public Vector3 GetWorldspacePosition(Vector3Int position)
         {
             return this.transform.position
                 + Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
                 + position.ToVector3() * InfiniteMap.BLOCK_SIZE;
-        }
-
-        public Vector3Int GetMapPosition(Vector3 worldSpacePosition)
-        {
-            var pos = (worldSpacePosition - this.transform.position) / InfiniteMap.BLOCK_SIZE;
-            return Vector3Int.FloorToInt(pos + new Vector3(0.5f, 0, 0.5f));
         }
 
         public void Clear()
@@ -52,15 +39,7 @@ namespace Sailing.WaveFunctionCollapse
         {
             ModuleData.Current = this.ModuleData.Modules;
             this.Clear();
-            this.Map = new InfiniteMap(this.MapHeight);
-        }
-
-        public bool Initialized
-        {
-            get
-            {
-                return this.Map != null;
-            }
+            this.Map = new InfiniteMap(new Vector3Int(this.collapseAreaSize, this.MapHeight, this.collapseAreaSize));
         }
 
         public bool BuildSlot(Slot slot)
@@ -91,7 +70,7 @@ namespace Sailing.WaveFunctionCollapse
 
         public void BuildAllSlots()
         {
-            foreach(var slot in this.Map.GetSlots()){
+            foreach(var slot in this.Map.GetAllSlots()){
                 this.BuildSlot(slot);
             }
         }
@@ -99,21 +78,21 @@ namespace Sailing.WaveFunctionCollapse
         public bool VisualizeSlots = false;
 
 #if UNITY_EDITOR
-	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmo(MapBehaviour mapBehaviour, GizmoType gizmoType) {
-		if (!mapBehaviour.VisualizeSlots) {
-			return;
-		}
-		if (mapBehaviour.Map == null) {
-			return;
-		}
-		foreach (var slot in mapBehaviour.Map.GetSlots()) {
-			if (slot.Collapsed || slot.Modules.Count == ModuleData.Current.Length) {
-				continue;
-			}
-			Handles.Label(mapBehaviour.GetWorldspacePosition(slot.Position), slot.Modules.Count.ToString());
-		}
-	}
+        [DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
+        static void DrawGizmo(MapBehaviour mapBehaviour, GizmoType gizmoType) {
+            if (!mapBehaviour.VisualizeSlots) {
+                return;
+            }
+            if (mapBehaviour.Map == null) {
+                return;
+            }
+            foreach (var slot in mapBehaviour.Map.GetAllSlots()) {
+                if (slot.Collapsed || slot.Modules.Count == ModuleData.Current.Length) {
+                    continue;
+                }
+                Handles.Label(mapBehaviour.GetWorldspacePosition(slot.Position), slot.Modules.Count.ToString());
+            }
+        }
 #endif
     }
 }

@@ -13,7 +13,7 @@ namespace Sailing.WaveFunctionCollapse
 
         public abstract Slot GetSlot(Vector3Int position);
 
-        public abstract IEnumerable<Slot> GetSlots();
+        public abstract IEnumerable<Slot> GetAllSlots();
 
         public abstract Slot Select(IEnumerable<Slot> slots);
 
