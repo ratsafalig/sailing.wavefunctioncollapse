@@ -31,9 +31,7 @@ namespace Sailing.WaveFunctionCollapse
             {
                 var prototype = prototypes[i];
 
-                var rotation = 0;
-
-                var module = new Module(prototype.gameObject, rotation, count++);
+                var module = new Module(prototype.gameObject, count++);
 
                 modules.Add(module);
             }

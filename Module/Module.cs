@@ -15,8 +15,6 @@ namespace Sailing.WaveFunctionCollapse
         public ModulePrototype Prototype;
         public GameObject Prefab;
 
-        public int Rotation;
-
         public ModuleSet[] PossibleNeighbors;
 
         [HideInInspector]
@@ -24,13 +22,12 @@ namespace Sailing.WaveFunctionCollapse
 
         public float PLogP;
 
-        public Module(GameObject prefab, int rotation, int index)
+        public Module(GameObject prefab, int index)
         {
-            this.Rotation = rotation;
             this.Index = index;
             this.Prefab = prefab;
             this.Prototype = this.Prefab.GetComponent<ModulePrototype>();
-            this.Name = this.Prototype.gameObject.name + " R" + rotation;
+            this.Name = this.Prototype.gameObject.name;
             this.PLogP = this.Prototype.Probability * Mathf.Log(this.Prototype.Probability);
         }
 
