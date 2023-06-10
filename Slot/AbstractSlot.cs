@@ -11,5 +11,7 @@ namespace Sailing.WaveFunctionCollapse
     public abstract class AbstractSlot
     {
         public abstract void Collapse();
+        public abstract void Update(ModuleSet modulesToSet);
+        public abstract AbstractSlot GetNeighbor(int direction);
     }
 }

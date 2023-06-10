@@ -37,7 +37,7 @@ namespace Sailing.WaveFunctionCollapse
         }
 
         // TODO only look up once and then cache???
-        public Slot GetNeighborSlot(int direction)
+        public override AbstractSlot GetNeighbor(int direction)
         {
             return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
         }
@@ -75,11 +75,11 @@ namespace Sailing.WaveFunctionCollapse
             {
                 var neighbors = module.PossibleNeighbors[d];
 
-                var neighborSlot = this.GetNeighborSlot(d);
+                var neighborSlot = this.GetNeighbor(d);
 
                 if (neighborSlot != null)
                 {
-                    neighborSlot.UpdateModules(neighbors);
+                    neighborSlot.Update(neighbors);
                 }
             }
 
@@ -87,7 +87,7 @@ namespace Sailing.WaveFunctionCollapse
             this.Collapsed = true;
         }
 
-        public void UpdateModules(ModuleSet modulesToSet)
+        public override void Update(ModuleSet modulesToSet)
         {
             this.Modules.Intersect(modulesToSet);
         }
