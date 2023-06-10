@@ -18,7 +18,7 @@ namespace Sailing.WaveFunctionCollapse
         {
             return this.transform.position
                 + Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
-                + position.ToVector3() * InfiniteMap.BLOCK_SIZE;
+                + (Vector3)(position) * InfiniteMap.BLOCK_SIZE;
         }
 
         public void Clear()
@@ -63,7 +63,6 @@ namespace Sailing.WaveFunctionCollapse
             gameObject.transform.parent = this.transform;
             gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
             slot.Instantiation = gameObject;
-            
             return true;
         }
 

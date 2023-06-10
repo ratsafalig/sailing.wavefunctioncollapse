@@ -12,12 +12,13 @@ namespace Sailing.WaveFunctionCollapse
         public int RangeLimit = 80;
         public static System.Random Random;
         public const float BLOCK_SIZE = 1f;
-        private IEnumerable<Vector3Int> targets;
+        private List<Vector3Int> Targets;
         private Dictionary<Vector3Int, Slot> Slots;
 
         public InfiniteMap(Vector3Int size) : base()
         {
             InfiniteMap.Random = new System.Random();
+
             this.Slots = new Dictionary<Vector3Int, Slot>();
 
             var start = Vector3Int.zero;
@@ -30,23 +31,40 @@ namespace Sailing.WaveFunctionCollapse
                 {
                     for (int z = 0; z < size.z; z++)
                     {
-                        targets.Add(start + new Vector3Int(x, y, z));
+                        var position = start + new Vector3Int(x, y, z);
+
+                        targets.Add(position);
+
+                        this.Slots[position] = new Slot(position, this);
                     }
                 }
             }
-            this.targets = targets;
+
+            this.Targets = targets;
         }
 
         public override Slot GetSlot(Vector3Int position)
         {
+            if(IsOutOfRange(position)){
+                return null;
+            }
+
             if (this.Slots.ContainsKey(position))
             {
                 return this.Slots[position];
             }
-
             this.Slots[position] = new Slot(position, this);
 
             return this.Slots[position];
+        }
+
+        private bool IsOutOfRange(Vector3Int position){
+            foreach(var target in this.Targets){
+                if(position.x == target.x && position.y == target.y && position.z == target.z){
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override IEnumerable<Slot> GetAllSlots()
@@ -57,7 +75,7 @@ namespace Sailing.WaveFunctionCollapse
         public override void Collapse(){
 
 
-            for (int i = 0; i < this.Slots.Count; i++)
+            for (int i = 0; i < this.Targets.Count; i++)
             {
                 var selected = this.Select(this.Slots.Values);
 

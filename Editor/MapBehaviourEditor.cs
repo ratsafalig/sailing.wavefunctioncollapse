@@ -30,7 +30,6 @@ namespace Sailing.WaveFunctionCollapse
                 mapBehaviour.Initialize();
                 mapBehaviour.Map.Collapse();
                 mapBehaviour.BuildAllSlots();
-                GUIUtility.ExitGUI();
                 Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
             }
             GUILayout.EndHorizontal();

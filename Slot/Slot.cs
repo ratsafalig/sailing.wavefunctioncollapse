@@ -29,17 +29,12 @@ namespace Sailing.WaveFunctionCollapse
             this.Modules = new ModuleSet(initializeFull: true);
         }
 
-        public Slot(Vector3Int position, AbstractMap map, Slot prototype)
-        {
-            this.Position = position;
-            this.map = map;
-            this.Modules = new ModuleSet(prototype.Modules);
-        }
-
         // TODO only look up once and then cache???
         public override AbstractSlot GetNeighbor(int direction)
         {
-            return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
+            var position = this.Position + Orientations.Direction[direction];
+            
+            return this.map.GetSlot(position);
         }
 
         public override void Collapse()
@@ -75,11 +70,11 @@ namespace Sailing.WaveFunctionCollapse
             {
                 var neighbors = module.PossibleNeighbors[d];
 
-                var neighborSlot = this.GetNeighbor(d);
+                var neighbor = this.GetNeighbor(d);
 
-                if (neighborSlot != null)
+                if (neighbor != null)
                 {
-                    neighborSlot.Update(neighbors);
+                    neighbor.Update(neighbors);
                 }
             }
 
