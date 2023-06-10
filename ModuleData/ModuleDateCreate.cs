@@ -14,13 +14,13 @@ namespace Sailing.WaveFunctionCollapse
         /// using transform hierarchy to decide any two tiles can concat 
         /// </summary>
         /// <param name="respectNeigborExclusions"></param>
-		public void CreateModules(bool respectNeigborExclusions = true)
+		public void CreateModules()
         {
-            doCreateModules(respectNeigborExclusions);
+            doCreateModules();
         }
 
 
-        private void doCreateModules(bool respectNeigborExclusions = true){
+        private void doCreateModules(){
             int count = 0;
             
             var modules = new List<Module>();

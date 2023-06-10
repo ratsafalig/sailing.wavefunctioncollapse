@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Sailing.WaveFunctionCollapse
 {
-    public class Slot
+    public class Slot : AbstractSlot
     {
         public Vector3Int Position;
         public int Rotation;
@@ -46,7 +46,7 @@ namespace Sailing.WaveFunctionCollapse
             return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
         }
 
-        public void Collapse(){
+        public override void Collapse(){
             strategy.Collapse(this);
         }
 
