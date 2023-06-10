@@ -11,14 +11,19 @@ namespace Sailing.WaveFunctionCollapse
     public partial class ModuleData : ScriptableObject, ISerializationCallbackReceiver
     {
         public static Module[] Current;
-
+        public Module[] Modules;
         public GameObject Prototypes;
 
-        public Module[] Modules;
+        public static class Direction{
+            public const string FORWARD = "FORWARD";
+            public const string BACK = "BACK";
+            public const string LEFT = "LEFT";
+            public const string RIGHT = "RIGHT";
+            public const string UP = "UP";
+            public const string DOWN = "DOWN";
+        }
 
-#if UNITY_EDITOR
-
-        private IEnumerable<ModulePrototype> getPrototypes()
+        private IEnumerable<ModulePrototype> getModulePrototypes()
         {
             foreach (Transform transform in this.Prototypes.transform)
             {
@@ -30,34 +35,34 @@ namespace Sailing.WaveFunctionCollapse
             }
         }
 
-		private string[][] getPrototypeNeighbors(ModulePrototype root){
+		private string[][] getModulePrototypeNeighbors(ModulePrototype root){
 			string[][] result = new string[6][];
 
 			foreach(Transform transform in root.transform){
 				var name = transform.name;
-				if(name.Contains("FORWARD")){
-					result[Orientations.FORWARD] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.FORWARD)){
+					result[Orientations.FORWARD] = getModulePrototypeNeighbor(transform);
 				}
-				if(name.Contains("BACK")){
-					result[Orientations.BACK] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.BACK)){
+					result[Orientations.BACK] = getModulePrototypeNeighbor(transform);
 				}
-				if(name.Contains("LEFT")){
-					result[Orientations.LEFT] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.LEFT)){
+					result[Orientations.LEFT] = getModulePrototypeNeighbor(transform);
 				}
-				if(name.Contains("RIGHT")){
-					result[Orientations.RIGHT] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.RIGHT)){
+					result[Orientations.RIGHT] = getModulePrototypeNeighbor(transform);
 				}
-				if(name.Contains("UP")){
-					result[Orientations.UP] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.UP)){
+					result[Orientations.UP] = getModulePrototypeNeighbor(transform);
 				}
-				if(name.Contains("DOWN")){
-					result[Orientations.DOWN] = getPrototypeNeighbor(transform);
+				if(name.Contains(Direction.DOWN)){
+					result[Orientations.DOWN] = getModulePrototypeNeighbor(transform);
 				}
 			}
 			return result;
 		}
 
-        private string[] getPrototypeNeighbor(Transform transform){
+        private string[] getModulePrototypeNeighbor(Transform transform){
             string[] result = new string[transform.childCount];
 
             for (int i = 0; i < transform.childCount; i++){
@@ -68,7 +73,6 @@ namespace Sailing.WaveFunctionCollapse
 
             return result;
         }
-#endif
 
         public void OnBeforeSerialize()
         {

@@ -25,7 +25,7 @@ namespace Sailing.WaveFunctionCollapse
             
             var modules = new List<Module>();
 
-            var prototypes = this.getPrototypes().ToArray();
+            var prototypes = this.getModulePrototypes().ToArray();
 
             for (int i = 0; i < prototypes.Length; i++)
             {
@@ -44,7 +44,7 @@ namespace Sailing.WaveFunctionCollapse
             {
                 module.PossibleNeighbors = new ModuleSet[6];
 
-                var prototypeNeighbors = this.getPrototypeNeighbors(module.Prototype);
+                var prototypeNeighbors = this.getModulePrototypeNeighbors(module.Prototype);
 
                 for (int direction = 0; direction < 6; direction++)
                 {
@@ -61,7 +61,7 @@ namespace Sailing.WaveFunctionCollapse
             }
 
             foreach(var module in modules){
-                var prototypeNeighbors = this.getPrototypeNeighbors(module.Prototype);
+                var prototypeNeighbors = this.getModulePrototypeNeighbors(module.Prototype);
 
                 for (int direction = 0; direction < 6; direction++)
                 {

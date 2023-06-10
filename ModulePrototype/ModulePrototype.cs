@@ -7,7 +7,7 @@ using System;
 
 namespace Sailing.WaveFunctionCollapse
 {
-    public partial class ModulePrototype : MonoBehaviour
+    public class ModulePrototype : MonoBehaviour
     {
         public float Probability = 1.0f;
         public bool Spawn = true;

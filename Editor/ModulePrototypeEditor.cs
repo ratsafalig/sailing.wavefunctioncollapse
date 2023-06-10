@@ -22,17 +22,6 @@ namespace Sailing.WaveFunctionCollapse
                     i++;
                 }
             }
-
-            if (GUILayout.Button("Distribute (Overview)"))
-            {
-                int w = Mathf.FloorToInt(Mathf.Sqrt(modulePrototype.transform.parent.childCount));
-                int i = 0;
-                foreach (Transform transform in modulePrototype.transform.parent)
-                {
-                    transform.localPosition = Vector3.forward * (i / w) * AbstractMap.BLOCK_SIZE * 1.4f + Vector3.right * (i % w) * AbstractMap.BLOCK_SIZE * 1.4f;
-                    i++;
-                }
-            }
         }
     }
 }

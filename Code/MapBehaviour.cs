@@ -91,7 +91,7 @@ namespace Sailing.WaveFunctionCollapse
 
         public void BuildAllSlots()
         {
-            foreach(var slot in this.Map.GetAllSlots()){
+            foreach(var slot in this.Map.GetSlots()){
                 this.BuildSlot(slot);
             }
         }
@@ -107,7 +107,7 @@ namespace Sailing.WaveFunctionCollapse
 		if (mapBehaviour.Map == null) {
 			return;
 		}
-		foreach (var slot in mapBehaviour.Map.GetAllSlots()) {
+		foreach (var slot in mapBehaviour.Map.GetSlots()) {
 			if (slot.Collapsed || slot.Modules.Count == ModuleData.Current.Length) {
 				continue;
 			}
