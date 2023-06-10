@@ -53,7 +53,6 @@ namespace Sailing.WaveFunctionCollapse
             {
                 return this.Slots[position];
             }
-            this.Slots[position] = new Slot(position, this);
 
             return this.Slots[position];
         }
