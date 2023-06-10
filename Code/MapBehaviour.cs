@@ -62,7 +62,6 @@ namespace Sailing.WaveFunctionCollapse
             GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
             gameObject.transform.parent = this.transform;
             gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
-            gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * slot.Rotation);
             slot.Instantiation = gameObject;
             
             return true;

@@ -12,7 +12,6 @@ namespace Sailing.WaveFunctionCollapse
         public int RangeLimit = 80;
         public static System.Random Random;
         public const float BLOCK_SIZE = 1f;
-        private HashSet<Slot> workArea;
         private IEnumerable<Vector3Int> targets;
         private Dictionary<Vector3Int, Slot> Slots;
 
@@ -56,11 +55,11 @@ namespace Sailing.WaveFunctionCollapse
         }
         
         public override void Collapse(){
-            this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
-            for (int i = 0; i < this.workArea.Count; i++)
+
+            for (int i = 0; i < this.Slots.Count; i++)
             {
-                var selected = this.Select(workArea);
+                var selected = this.Select(this.Slots.Values);
 
                 if (selected != null)
                 {
