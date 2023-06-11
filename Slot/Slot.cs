@@ -10,7 +10,8 @@ namespace Sailing.WaveFunctionCollapse
 {
     public class Slot : AbstractSlot
     {
-        public Vector3Int Position;
+        public Vector3 Position;
+        public Vector3 Rotation;
         public GameObject Instantiation;
         public Module Module;
 
@@ -22,9 +23,10 @@ namespace Sailing.WaveFunctionCollapse
 
         public bool Collapsed;
 
-        public Slot(Vector3Int position, AbstractMap map)
+        public Slot(Vector3 position, Vector3 rotation, AbstractMap map)
         {
             this.Position = position;
+            this.Rotation = rotation;
             this.map = map;
             this.Modules = new ModuleSet(initializeFull: true);
         }
@@ -68,7 +70,7 @@ namespace Sailing.WaveFunctionCollapse
 
             for (int d = 0; d < 6; d++)
             {
-                var neighbors = module.PossibleNeighbors[d];
+                var neighbors = module.Neighbors[d];
 
                 var neighbor = this.GetNeighbor(d);
 

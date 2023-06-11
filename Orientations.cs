@@ -15,7 +15,7 @@ namespace Sailing.WaveFunctionCollapse
         public const int UP = 4;
         public const int FORWARD = 5;
 
-        public static Vector3Int[] Direction
+        public static Vector3[] Direction
         {
             get
             {
@@ -27,7 +27,7 @@ namespace Sailing.WaveFunctionCollapse
                     Vector3.up,
                     Vector3.forward
                 };
-                return vectors.Select(vector => Vector3Int.RoundToInt(vector)).ToArray();
+                return vectors.ToArray();
             }
         }
     }

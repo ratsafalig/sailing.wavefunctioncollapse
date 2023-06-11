@@ -12,18 +12,18 @@ namespace Sailing.WaveFunctionCollapse
         public int RangeLimit = 80;
         public static System.Random Random;
         public const float BLOCK_SIZE = 1f;
-        private List<Vector3Int> Targets;
-        private Dictionary<Vector3Int, Slot> Slots;
+        private List<Vector3> Targets;
+        private Dictionary<Vector3, Slot> Slots;
 
-        public InfiniteMap(Vector3Int size) : base()
+        public InfiniteMap(Vector3 size) : base()
         {
             InfiniteMap.Random = new System.Random();
 
-            this.Slots = new Dictionary<Vector3Int, Slot>();
+            this.Slots = new Dictionary<Vector3, Slot>();
 
-            var start = Vector3Int.zero;
+            var start = Vector3.zero;
 
-            var targets = new List<Vector3Int>();
+            var targets = new List<Vector3>();
 
             for (int x = 0; x < size.x; x++)
             {
@@ -31,11 +31,11 @@ namespace Sailing.WaveFunctionCollapse
                 {
                     for (int z = 0; z < size.z; z++)
                     {
-                        var position = start + new Vector3Int(x, y, z);
+                        var position = start + new Vector3(x, y, z);
 
                         targets.Add(position);
 
-                        this.Slots[position] = new Slot(position, this);
+                        this.Slots[position] = new Slot(position, Vector3.zero, this);
                     }
                 }
             }
@@ -43,7 +43,24 @@ namespace Sailing.WaveFunctionCollapse
             this.Targets = targets;
         }
 
-        public override Slot GetSlot(Vector3Int position)
+        public InfiniteMap(IEnumerable<Vector3> positions){
+            InfiniteMap.Random = new System.Random();
+
+            this.Slots = new Dictionary<Vector3, Slot>();
+
+            var start = Vector3.zero;
+
+            var targets = new List<Vector3>();
+
+            foreach(var position in positions){
+                targets.Add(position);
+                this.Slots[position] = new Slot(position, Vector3.zero, this);
+            }
+
+            this.Targets = targets;
+        }
+
+        public override Slot GetSlot(Vector3 position)
         {
             if(IsOutOfRange(position)){
                 return null;
@@ -54,10 +71,10 @@ namespace Sailing.WaveFunctionCollapse
                 return this.Slots[position];
             }
 
-            return this.Slots[position];
+            return null;
         }
 
-        private bool IsOutOfRange(Vector3Int position){
+        private bool IsOutOfRange(Vector3 position){
             foreach(var target in this.Targets){
                 if(position.x == target.x && position.y == target.y && position.z == target.z){
                     return false;

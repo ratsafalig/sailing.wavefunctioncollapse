@@ -24,14 +24,33 @@ namespace Sailing.WaveFunctionCollapse
             GUILayout.BeginHorizontal();
             int.TryParse(GUILayout.TextField(mapBehaviour.collapseAreaSize.ToString()), out mapBehaviour.collapseAreaSize);
 
-            if (GUILayout.Button("Initialize " + mapBehaviour.collapseAreaSize + "x" + mapBehaviour.collapseAreaSize + " area"))
+            if (GUILayout.Button("Initialize Rect Map " + mapBehaviour.collapseAreaSize + "x" + mapBehaviour.collapseAreaSize + " area"))
             {
                 var startTime = System.DateTime.Now;
-                mapBehaviour.Initialize();
+                mapBehaviour.InitializeRectMap();
                 mapBehaviour.Map.Collapse();
                 mapBehaviour.BuildAllSlots();
                 Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
             }
+
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            
+            int.TryParse(GUILayout.TextField(mapBehaviour.discrete.ToString()), out mapBehaviour.discrete);
+
+            float.TryParse(GUILayout.TextField(mapBehaviour.minRate.ToString()), out mapBehaviour.minRate);
+            float.TryParse(GUILayout.TextField(mapBehaviour.maxRate.ToString()), out mapBehaviour.maxRate);
+            
+            if (GUILayout.Button("Initialize Uneven Map " + mapBehaviour.collapseAreaSize + "x" + mapBehaviour.collapseAreaSize + " area"))
+            {
+                var startTime = System.DateTime.Now;
+                mapBehaviour.InitializeUnevenMap();
+                mapBehaviour.Map.Collapse();
+                mapBehaviour.BuildAllSlots();
+                Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
+            }
+
             GUILayout.EndHorizontal();
         }
     }

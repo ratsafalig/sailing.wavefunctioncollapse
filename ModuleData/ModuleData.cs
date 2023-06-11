@@ -14,7 +14,7 @@ namespace Sailing.WaveFunctionCollapse
         public Module[] Modules;
         public GameObject Prototypes;
 
-        public static class Direction{
+        public class Direction{
             public const string FORWARD = "FORWARD";
             public const string BACK = "BACK";
             public const string LEFT = "LEFT";

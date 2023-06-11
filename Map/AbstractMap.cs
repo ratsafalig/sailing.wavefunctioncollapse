@@ -11,7 +11,7 @@ namespace Sailing.WaveFunctionCollapse
     {
         public AbstractMap() { }
 
-        public abstract Slot GetSlot(Vector3Int position);
+        public abstract Slot GetSlot(Vector3 position);
 
         public abstract IEnumerable<Slot> GetAllSlots();
 

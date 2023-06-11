@@ -40,7 +40,7 @@ namespace Sailing.WaveFunctionCollapse
 
             foreach (var module in modules)
             {
-                module.PossibleNeighbors = new ModuleSet[6];
+                module.Neighbors = new ModuleSet[6];
 
                 var prototypeNeighbors = this.getModulePrototypeNeighbors(module.Prototype);
 
@@ -48,13 +48,13 @@ namespace Sailing.WaveFunctionCollapse
                 {
                     var neighbors = prototypeNeighbors[direction];
 
-                    var possibleNeighborModules = modules.Where(
+                    var neighborModules = modules.Where(
                         neighbor => neighbors.Any(
                             elem => elem == neighbor.Prototype.name
                         )
                     );
 
-                    module.PossibleNeighbors[direction] = new ModuleSet(possibleNeighborModules);
+                    module.Neighbors[direction] = new ModuleSet(neighborModules);
                 }
             }
 
@@ -66,18 +66,18 @@ namespace Sailing.WaveFunctionCollapse
                     var neighbors = prototypeNeighbors[direction];
                     int oppositeDirection = (direction + 3) % 6;
 
-                    var possibleNeighborModules = modules.Where(
+                    var neighborModules = modules.Where(
                         neighbor => neighbors.Any(
                             elem => elem == neighbor.Prototype.name
                         )
                     );
 
-                    foreach(var possibleNeighborModule in possibleNeighborModules){
-                        var prev = possibleNeighborModule.PossibleNeighbors[oppositeDirection];
+                    foreach(var neighborModule in neighborModules){
+                        var prev = neighborModule.Neighbors[oppositeDirection];
 
                         prev.Add(module);
 
-                        possibleNeighborModule.PossibleNeighbors[oppositeDirection] = prev;
+                        neighborModule.Neighbors[oppositeDirection] = prev;
                     }
                 }
             }
